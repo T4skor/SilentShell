@@ -19,7 +19,7 @@ Before running the script, make sure to update the following variables:
 
 ### Example:
 ```python
-RHOST = "t4skor.ddns.net"
+RHOST = "192.168.1.xxx"
 RPORT = 8080
 ```
 
