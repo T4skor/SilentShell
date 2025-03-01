@@ -1,48 +1,62 @@
-# Reverse Shell Script for Linux
+# SilentShell
 
-This Python script sets up a reverse shell and configures it to run on startup as a systemd service. It connects to a remote server and listens for incoming commands. The script is designed for Linux systems.
+SilentShell is a lightweight tool designed to provide a secure and discreet remote shell. Its goal is to enable stealthy command execution on remote systems.
 
 ## Features
-- **Reverse Shell**: The script establishes a reverse shell connection to a remote host on a specified IP and port.
-- **Startup Configuration**: It creates a systemd service that ensures the script runs on system startup.
-- **Error Handling**: Basic error handling is implemented for socket and systemd service creation.
+- Secure remote shell
+- Low resource consumption
+- Easy to set up and deploy
+- Encrypted communication
 
-## Prerequisites
-- Linux-based operating system.
-- Python 3 installed.
-- `systemd` for creating the service.
+## Installation
 
-## Configuration
-Before running the script, make sure to update the following variables:
-- `RHOST`: The IP address or domain of the remote host where the reverse shell will connect.
-- `RPORT`: The port on the remote host to connect to.
+Clone the repository:
 
-### Example:
-```python
-RHOST = "192.168.1.xxx"
-RPORT = 8080
+```sh
+git clone https://github.com/T4skor/SilentShell.git
+cd SilentShell
+```
+
+Compile the project if necessary:
+
+```sh
+make
 ```
 
 ## Usage
 
-### 1. Run the script:
-To run the script, execute the Python file:
+Run the server on the target machine:
 
-```bash
-python3 /path/to/script.py
+```sh
+./SilentShell -s
 ```
 
-### 2. Service Configuration:
-The script will automatically create a systemd service to run the reverse shell script on system startup.
+Connect from the client:
 
-- The service will be created at `/etc/systemd/system/revshell.service`.
-- The service will run as the `root` user and restart if it fails.
+```sh
+./SilentShell -c <SERVER_IP>
+```
 
-### 3. Enable and Start the Service:
-Once the script is executed, it will configure the service to run at startup using `systemd`.
+## Requirements
+- Linux or Windows
+- Dependencies: `openssl`, `libssh`, `gcc`
 
-## Security Warning
-This script is intended for educational purposes only. Unauthorized access to computer systems is illegal and unethical. Always ensure you have permission before running any scripts that interact with external networks.
+## Contributions
+
+Contributions are welcome. To contribute:
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature-new`).
+3. Commit and push your changes (`git commit -m "Description" && git push origin feature-new`).
+4. Open a Pull Request.
+
+## Security
+
+SilentShell employs encryption to secure communications, but it is recommended to use it in controlled environments and review the code to adapt it to your needs.
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+This project is licensed under the MIT License. See the `LICENSE` file for details.
+
+## Contact
+
+For questions or suggestions, feel free to open an issue in the repository.
